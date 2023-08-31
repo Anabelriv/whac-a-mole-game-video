@@ -1,33 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whac-A-Mole with Head Movement</title>
-    <style>
-        #gameCanvas {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            border: 1px solid black;
-        }
-
-        .mole {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: brown;
-            border-radius: 50%;
-        }
-    </style>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Whac-a-mole</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="buffer-loader.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
 </head>
 
 <body>
-    <div id="gameCanvas">
-        <!-- Moles will be dynamically created here -->
-    </div>
-    <script src="script.js"></script>
+    <main id="motion-app">
+        <!-- Set up and webcam control -->
+        <div class="form-control webcam-start" id="webcam-control">
+            <label class="form-switch">
+                <input type="checkbox" id="webcam-switch">
+                <i></i>
+                <span id="webcam-caption">Click to Start Webcam and whack a mole!</span>
+            </label>
+        </div>
+        <div id="errorMsg" class="col-12 alert-danger d-none">
+            Fail to start camera <br>
+            1. Please allow permission to access camera. <br>
+            2. If you are browsing through social media built in browsers, look for the ... or browser icon on the right
+            top/bottom corner, and open the page in Sarafi (iPhone)/ Chrome (Android)
+        </div>
+        <!-- First background when webcam is off -->
+        <div class="mole-background">
+            <img src="https://t4.ftcdn.net/jpg/01/17/59/79/360_F_117597995_MXyFgPQrVHLJpD9OPitvXhbnFWjLf22s.jpg">
+        </div>
+        <!-- webcam bar -->
+        <div class="md-modal md-effect-12">
+            <div class="app-panel md-content">
+                <div class="webcam-container d-none">
+                    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+                    <canvas id="canvas-source" width="640" height="480"></canvas>
+                    <div class="motion-cam">
+                        <div class="motion-cam-title">Motion Cam</div>
+                        <canvas id="canvas-blended" width="440" height="280"></canvas>
+                    </div>
+                </div>
+                <!-- moles -->
+                <div class="mole-container">
+                    <div class="row row-top justify-content-center">
+                        <div class="col-6 col-sm-3">
+                            <img class="virtual-drum" src="mole.png" name="crash" vd-id='0'>
+                        </div>
+                    </div>
+                    <div class="row row-center justify-content-center">
+                        <div class="col-4 p-sm-3 p-0">
+                            <img class="virtual-drum" src="mole.png" name="left" vd-id='1'>
+                            <div class="spinner-grow text-primary d-none" role="status" id="left-glowing">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="col-4 p-sm-3 p-0">
+                            <img class="virtual-drum" src="mole.png" name="top" vd-id='2'>
+                            <div class="spinner-grow text-primary d-none" role="status" id="top-glowing">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="col-4 p-sm-3 p-0">
+                            <img class="virtual-drum" src="mole.png" name="right" vd-id='3'>
+                            <div class="spinner-grow text-primary d-none" role="status" id="right-glowing">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="md-overlay"></div>
+    </main>
+    <script src='motion-detection.js'></script>
 </body>
 
 </html>
