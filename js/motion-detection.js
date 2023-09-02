@@ -12,7 +12,7 @@ contextSource.translate(canvasSource.width, 0);
 contextSource.scale(-1, 1);
 
 
-
+// // swtich to turn on camera
 $("#webcam-switch").change(function () {
     if (this.checked) {
         $('.md-modal').addClass('md-show');
@@ -23,7 +23,7 @@ $("#webcam-switch").change(function () {
                 startMotionDetection();
             })
             .catch(err => {
-                displayError();
+                console.log(err);
             });
     }
     else {
@@ -34,8 +34,8 @@ $("#webcam-switch").change(function () {
     }
 });
 
-
-$('.virtual-drum').on('load', function () {
+// store the location of the gears by their (x, y, width, height), please note that the width and height need to be calculated by the ratio between the full screen camera size and the blended canvas size
+$('.virtual-mole').on('load', function () {
     var viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     var ratioWidth = canvasBlended.width / viewWidth;
@@ -52,203 +52,164 @@ $('.virtual-drum').on('load', function () {
     if (this.complete) $(this).trigger('load');
 });
 
-
+// can't find
 function startMotionDetection() {
     setAllDrumReadyStatus(false);
     update();
     setTimeout(setAllDrumReadyStatus, 1000, true);
 }
 
-var AudioContext = (
-    window.AudioContext ||
-    window.webkitAudioContext ||
-    null
-);
+// // Sound
+// var AudioContext = (
+//     window.AudioContext ||
+//     window.webkitAudioContext ||
+//     null
+// );
 
-function loadSounds() {
-    soundContext = new AudioContext();
-    bufferLoader = new BufferLoader(soundContext,
-        [
-            audioPath + '/punch-140236.mp3'
-        ],
-        finishedLoading
-    );
-    bufferLoader.load();
-}
+// function loadSounds() {
+//     soundContext = new AudioContext();
+//     bufferLoader = new BufferLoader(soundContext,
+//         [
+//             audioPath + '/punch-140236.mp3'
+//         ],
+//         finishedLoading
+//     );
+//     bufferLoader.load();
+// }
 
-function finishedLoading(bufferList) {
-    for (var i = 0; i < 5; i++) {
-        var source = soundContext.createBufferSource();
-        source.buffer = bufferList[i];
-        source.connect(soundContext.destination);
-        moles[i].sound = source;
-        moles[i].ready = true;
-    }
-}
-
-function playHover(mole) {
-    if (!mole.ready) return;
-    var source = soundContext.createBufferSource();
-    source.buffer = mole.sound.buffer;
-    source.connect(soundContext.destination);
-    source.start(0);
-    mole.ready = false;
-    playAnimate(mole);
-    // throttle the note
-    setTimeout(setDrumReady, 500, mole);
-}
+// function finishedLoading(bufferList) {
+//     for (var i = 0; i < 5; i++) {
+//         var source = soundContext.createBufferSource();
+//         source.buffer = bufferList[i];
+//         source.connect(soundContext.destination);
+//         moles[i].sound = source;
+//         moles[i].ready = true;
+//     }
+// }
+// // end of sound
+// function playHover(mole) {
+//     if (!mole.ready) return;
+//     var source = soundContext.createBufferSource();
+//     source.buffer = mole.sound.buffer;
+//     source.connect(soundContext.destination);
+//     source.start(0);
+//     mole.ready = false;
+//     playAnimate(mole);
+//     // throttle the note
+//     setTimeout(setDrumReady, 500, mole);
+// }
 
 function startGame(mole) {
     mole.ready = true;
 }
 
-window.requestAnimationFrame = (function () {
-    return window.requestAnimationFrame ||
-        window.requestAnimationFrame ||
-        window.requestAnimationFrame ||
-        window.requestAnimationFrame ||
-        window.requestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-})();
+// window.requestAnimationFrame = (function () {
+//     return window.requestAnimationFrame ||
+//         window.requestAnimationFrame ||
+//         window.requestAnimationFrame ||
+//         window.requestAnimationFrame ||
+//         window.requestAnimationFrame ||
+//         function (callback) {
+//             window.setTimeout(callback, 1000 / 60);
+//         };
+// })();
 
-function update() {
-    drawVideo();
-    blend();
-    checkAreas();
-    requestAnimFrame(update);
-}
+// function update() {
+//     drawVideo();
+//     blend();
+//     checkAreas();
+//     requestAnimFrame(update);
+// }
 
-function drawVideo() {
-    contextSource.drawImage(webcamElement, 0, 0, webcamElement.width, webcamElement.height);
-}
+// function drawVideo() {
+//     contextSource.drawImage(webcamElement, 0, 0, webcamElement.width, webcamElement.height);
+// }
+// // motion detection
+// function blend() {
+//     var width = canvasSource.width;
+//     var height = canvasSource.height;
+//     // get webcam image data
+//     var sourceData = contextSource.getImageData(0, 0, width, height);
+//     // create an image if the previous image doesn’t exist
+//     if (!lastImageData) lastImageData = contextSource.getImageData(0, 0, width, height);
+//     // create a ImageData instance to receive the blended result
+//     var blendedData = contextSource.createImageData(width, height);
+//     // blend the 2 images
+//     differenceAccuracy(blendedData.data, sourceData.data, lastImageData.data);
+//     // draw the result in a canvas
+//     contextBlended.putImageData(blendedData, 0, 0);
+//     // store the current webcam image
+//     lastImageData = sourceData;
+// }
 
-function blend() {
-    var width = canvasSource.width;
-    var height = canvasSource.height;
-    // get webcam image data
-    var sourceData = contextSource.getImageData(0, 0, width, height);
-    // create an image if the previous image doesn’t exist
-    if (!lastImageData) lastImageData = contextSource.getImageData(0, 0, width, height);
-    // create a ImageData instance to receive the blended result
-    var blendedData = contextSource.createImageData(width, height);
-    // blend the 2 images
-    differenceAccuracy(blendedData.data, sourceData.data, lastImageData.data);
-    // draw the result in a canvas
-    contextBlended.putImageData(blendedData, 0, 0);
-    // store the current webcam image
-    lastImageData = sourceData;
-}
+// function fastAbs(value) {
+//     //equal Math.abs
+//     return (value ^ (value >> 31)) - (value >> 31);
+// }
 
-function fastAbs(value) {
-    //equal Math.abs
-    return (value ^ (value >> 31)) - (value >> 31);
-}
+// function threshold(value) {
+//     return (value > 0x15) ? 0xFF : 0;
+// }
 
-function threshold(value) {
-    return (value > 0x15) ? 0xFF : 0;
-}
+// function differenceAccuracy(target, data1, data2) {
+//     if (data1.length != data2.length) return null;
+//     var i = 0;
+//     while (i < (data1.length * 0.25)) {
+//         var average1 = (data1[4 * i] + data1[4 * i + 1] + data1[4 * i + 2]) / 3;
+//         var average2 = (data2[4 * i] + data2[4 * i + 1] + data2[4 * i + 2]) / 3;
+//         var diff = threshold(fastAbs(average1 - average2));
+//         target[4 * i] = diff;
+//         target[4 * i + 1] = diff;
+//         target[4 * i + 2] = diff;
+//         target[4 * i + 3] = 0xFF;
+//         ++i;
+//     }
+// }
 
-function differenceAccuracy(target, data1, data2) {
-    if (data1.length != data2.length) return null;
-    var i = 0;
-    while (i < (data1.length * 0.25)) {
-        var average1 = (data1[4 * i] + data1[4 * i + 1] + data1[4 * i + 2]) / 3;
-        var average2 = (data2[4 * i] + data2[4 * i + 1] + data2[4 * i + 2]) / 3;
-        var diff = threshold(fastAbs(average1 - average2));
-        target[4 * i] = diff;
-        target[4 * i + 1] = diff;
-        target[4 * i + 2] = diff;
-        target[4 * i + 3] = 0xFF;
-        ++i;
-    }
-}
-
-function checkAreas() {
-    // loop over the drum areas
-    for (var drumName in moles) {
-        var drum = moles[drumName];
-        if (drum.x > 0 || drum.y > 0) {
-            var blendedData = contextBlended.getImageData(drum.x, drum.y, drum.width, drum.height);
-            var i = 0;
-            var average = 0;
-            // loop over the pixels
-            while (i < (blendedData.data.length * 0.25)) {
-                // make an average between the color channel
-                average += (blendedData.data[i * 4] + blendedData.data[i * 4 + 1] + blendedData.data[i * 4 + 2]) / 3;
-                ++i;
-            }
-            // calculate an average between of the color values of the drum area
-            average = Math.round(average / (blendedData.data.length * 0.25));
-            if (average > 20) {
-                // over a small limit, consider that a movement is detected
-                // play a note and show a visual feedback to the user
-                //console.log(drum.name + '-' + average)
-                playHover(drum);
-            }
-        }
-    }
-}
-
-function playAnimate(drum) {
-    if (drum.name == "crash" || drum.name == "hi-hat") {
-        $('[name="' + drum.name + '"]').effect("shake", { times: 1, distance: 5 }, 'fast');
-    }
-    else {
-        var glowing = $("#" + drum.name + "-glowing");
-        glowing.removeClass("d-none");
-        glowing.height(glowing[0].clientWidth);
-        setTimeout(function () { glowing.addClass("d-none"); }, 500);
-    }
-}
-
-function setAllDrumReadyStatus(isReady) {
-    for (var drumName in drums) {
-        drums[drumName].ready = isReady;
-    }
-}
-
-// var moles = ["crash", "hi-hat", "left", "top", "right"]; // List of mole names
-// var moleInterval; // To store the interval for mole appearance
+// function checkAreas() {
+//     // loop over the drum areas
+//     for (var drumName in moles) {
+//         var drum = moles[drumName];
+//         if (drum.x > 0 || drum.y > 0) {
+//             var blendedData = contextBlended.getImageData(drum.x, drum.y, drum.width, drum.height);
+//             var i = 0;
+//             var average = 0;
+//             // loop over the pixels
+//             while (i < (blendedData.data.length * 0.25)) {
+//                 // make an average between the color channel
+//                 average += (blendedData.data[i * 4] + blendedData.data[i * 4 + 1] + blendedData.data[i * 4 + 2]) / 3;
+//                 ++i;
+//             }
+//             // calculate an average between of the color values of the drum area
+//             average = Math.round(average / (blendedData.data.length * 0.25));
+//             if (average > 20) {
+//                 // over a small limit, consider that a movement is detected
+//                 // play a note and show a visual feedback to the user
+//                 //console.log(drum.name + '-' + average)
+//                 playHover(drum);
+//             }
+//         }
+//     }
+// }
 
 // function playAnimate(drum) {
-//   // Play sound when touching the mole
-//   var audio = new Audio('punch-140236.mp3');
-//   audio.play();
-
-//   // Animate mole shaking
-//   if (drum.name == "crash" || drum.name == "hi-hat") {
-//     $('[name="' + drum.name + '"]').effect("shake", { times: 1, distance: 5 }, 'fast');
-//   } else {
-//     var glowing = $("#" + drum.name + "-glowing");
-//     glowing.removeClass("d-none");
-//     glowing.height(glowing[0].clientWidth);
-//     setTimeout(function () { glowing.addClass("d-none"); }, 500);
-//   }
+//     if (drum.name == "crash" || drum.name == "hi-hat") {
+//         $('[name="' + drum.name + '"]').effect("shake", { times: 1, distance: 5 }, 'fast');
+//     }
+//     else {
+//         var glowing = $("#" + drum.name + "-glowing");
+//         glowing.removeClass("d-none");
+//         glowing.height(glowing[0].clientWidth);
+//         setTimeout(function () { glowing.addClass("d-none"); }, 500);
+//     }
 // }
 
-// function showRandomMole() {
-//   var randomMole = moles[Math.floor(Math.random() * moles.length)];
-//   var randomGlowing = $("#" + randomMole + "-glowing");
-//   randomGlowing.removeClass("d-none");
-//   randomGlowing.height(randomGlowing[0].clientWidth);
-//   setTimeout(function () { randomGlowing.addClass("d-none"); }, 500);
+// function setAllDrumReadyStatus(isReady) {
+//     for (var drumName in moles) {
+//         moles[drumName].ready = isReady;
+//     }
 // }
 
-// function startGame() {
-//   moleInterval = setInterval(showRandomMole, 1000); // Moles appear and disappear every 1 second
-// }
-
-// function stopGame() {
-//   clearInterval(moleInterval);
-//   // Hide all glowing moles
-//   for (var i = 0; i < moles.length; i++) {
-//     $("#" + moles[i] + "-glowing").addClass("d-none");
-//   }
-// }
-
-// Call startGame() to start the game and stopGame() to stop it
 
 
 function cameraStarted() {
@@ -270,3 +231,4 @@ function cameraStopped() {
     $("#webcam-caption").html("Click to Start Webcam");
     $('.md-modal').removeClass('md-show');
 }
+

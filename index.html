@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Whac-a-mole</title>
+    <meta charset="UTF-8">
+    <title>Whack A Mole!</title>
+    <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style2.css">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel='stylesheet' type='text/css' media='screen' href='style/motion-detection.css'>
-    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="js/buffer-loader.js"></script>
     <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+
 </head>
 
 <body>
@@ -42,43 +44,33 @@
                     <canvas id="canvas-source" width="640" height="480"></canvas>
                     <div class="motion-cam">
                         <div class="motion-cam-title">Motion Cam</div>
-                        <canvas id="canvas-blended" width="440" height="280"></canvas>
+                        <canvas id="canvas-blended" width="440"
+                            height="280"></canvas><!--small canvas screen for motion recognition-->
+                        <!-- <canvas id="snapshot-canvas" width="440" height="280"></canvas> -->
                     </div>
                 </div>
-                <!-- moles -->
-                <div class="mole-container">
-                    <div class="row row-top justify-content-center">
-                        <div class="col-6 col-sm-3">
-                            <img class="virtual-drum" src="mole.png" name="crash" vd-id='0'>
-                        </div>
-                    </div>
-                    <div class="row row-center justify-content-center">
-                        <div class="col-4 p-sm-3 p-0">
-                            <img class="virtual-drum" src="mole.png" name="left" vd-id='1'>
-                            <div class="spinner-grow text-primary d-none" role="status" id="left-glowing">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="col-4 p-sm-3 p-0">
-                            <img class="virtual-drum" src="mole.png" name="top" vd-id='2'>
-                            <div class="spinner-grow text-primary d-none" role="status" id="top-glowing">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="col-4 p-sm-3 p-0">
-                            <img class="virtual-drum" src="mole.png" name="right" vd-id='3'>
-                            <div class="spinner-grow text-primary d-none" role="status" id="right-glowing">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h1>Whack-a-mole!</h1>
+                <h1 class="score" id="scoreEl">0</h1>
+                <!-- <div class="start">
+                    <button onClick="hideAppearMole()">Start!</button>
+                </div> -->
 
-            </div>
-        </div>
-        <div class="md-overlay"></div>
-    </main>
-    <script src='js/motion-detection.js'></script>
+                <div class="game">
+                    <div class="hole hole1">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="crash" vm-id="1" ready=true></img>
+                    </div>
+                    <div class="hole hole2">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="kit-kat" vm-id="2" ready=true></img>
+                    </div>
+                    <div class="hole hole3">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="sneacker" vm-id="3" ready=true></img>
+                    </div>
+
+                </div>
+                <script src="script.js"></script>
 </body>
 
 </html>
