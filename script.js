@@ -1,26 +1,21 @@
 //game hiding moles
 const holes = document.querySelectorAll('.hole');
 const scoreBoard = document.querySelector('.score');
-//const moles = document.querySelectorAll('.mole'); // this is needed for the game 
 let moles = {}; // this is needed for the motion recognition
 let lastHole;
 let timeUp = false;
 let score = 0;
-
-
 //Webcam
-
 const webcamElement = document.getElementById('webcam');
 const webcam = new Webcam(webcamElement, 'user');
 //motion detection
-
 let timeOut, lastImageData;
 let canvasSource = $("#canvas-source")[0];
 let canvasBlended = $("#canvas-blended")[0];
 let contextSource = canvasSource.getContext('2d');
 let contextBlended = canvasBlended.getContext('2d');
-//let moles = {};
-//const audioPath = "sound"
+//score update
+const scoreElement = document.getElementById('scoreEl');
 
 contextSource.translate(canvasSource.width, 0);
 contextSource.scale(-1, 1);
@@ -43,19 +38,18 @@ $("#webcam-switch").change(function () {
         $("#errorMsg").addClass("d-none");
         webcam.stop();
         cameraStopped();
-        setAllMoleReadyStatus(false);
     }
 });
 
-function setMoleReady(mole) {
-    //mole.ready = true;
-}
+// function setMoleReady(mole) {
+//     // mole.ready = true;
+// }
 
-function setAllMoleReadyStatus(isReady) {
-    // //for (var moleName in moles) {
-    //     moles[moleName].ready = isReady;
-    // }
-}
+// function setAllMoleReadyStatus(isReady) {
+//     // for (var moleName in moles) {
+//     //     moles[moleName].ready = isReady;
+//     // }
+// }
 
 // getting the measures of the screen and the small black screen and the sizes of the moles
 $('.mole').on('load', function (event) {
@@ -66,7 +60,7 @@ $('.mole').on('load', function (event) {
     moles[this.attributes['vm-id'].value] = {
         id: this.attributes['vm-id'].value,
         name: this.attributes['name'].value,
-        ready: this.attributes['ready'].value,
+        // ready: this.attributes['ready'].value,
         width: this.width * ratioWidth,
         height: this.height * ratioHeight,
         x: this.x * ratioWidth,
@@ -77,30 +71,26 @@ $('.mole').on('load', function (event) {
 });
 
 function startMotionDetection() {
-    setAllMoleReadyStatus(false);
+    // setAllMoleReadyStatus(false);
     update();
-    setTimeout(setAllMoleReadyStatus, 1000, true);
+    console.log("hiush");
+    // setTimeout(setAllMoleReadyStatus, 1000, true);
 }
 
 function playHover(mole) {
-    if (!mole.ready) return;
-    mole.ready = false;
+    // if (!mole.ready) return;
+    // mole.ready = false;
     updateScore();
     // throttle the note
-    setTimeout(setMoleReady, 500, mole);
+    // setTimeout(setMoleReady, 500, mole);
 
 }
-
-const scoreElement = document.getElementById('scoreEl')
 
 function updateScore() {
     score++;
     scoreElement.textContent = score;
 };
 
-function setMoleReady(mole) {
-    mole.ready = true;
-}
 
 function hideAppearMole() {
     function randomTime(min, max) {
@@ -219,7 +209,7 @@ function checkAreas() {
                 // over a small limit, consider that a movement is detected
                 // play a note and show a visual feedback to the user
                 //console.log(drum.name + '-' + average)
-                console.log("hi")
+                console.log("bla")
                 playHover(mole); // I need to change this to whack function??
             }
         }

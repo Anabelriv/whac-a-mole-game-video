@@ -223,19 +223,6 @@ main {
     }
 }
 
-/* 
-.mole-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    /* top: 0;
-    left: 0; */
-/* position: absolute; 
-}*/
 
 .mole-background {
     width: 100vw;
@@ -409,12 +396,22 @@ main {
 
 
 .game {
-    width: 1600px;
-    height: 800px;
+    width: 1000px;
+    height: 200px;
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
 }
+
+/* .game {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+} */
 
 .hole {
     flex: 1 0 33.33%;
@@ -439,10 +436,11 @@ main {
     /* background-size: 50%; */
     position: absolute;
     top: 100%;
-    width: 50%;
-    height: 50%;
+    width: 40%;
+    height: 60%;
     transition: all 0.4s ease;
 }
+
 
 .hole.up .mole {
     top: 0;
