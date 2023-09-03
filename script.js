@@ -7,6 +7,7 @@ let timeUp = false;
 let score = 0;
 //Webcam
 const webcamElement = document.getElementById('webcam');
+
 const webcam = new Webcam(webcamElement, 'user');
 //motion detection
 let timeOut, lastImageData;
