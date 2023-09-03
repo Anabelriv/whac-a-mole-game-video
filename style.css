@@ -232,13 +232,6 @@ main {
     background: black;
 }
 
-/* 
-.mole-container img {
-    max-width: 100%;
-    /* opacity: 0.5; 
-    filter: alpha(opacity=50);
-} */
-
 .mole-background img {
     width: 100%;
     opacity: 0.5;
@@ -395,12 +388,22 @@ main {
 }
 
 
-.game {
+/* .game {
     width: 1000px;
     height: 200px;
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
+} */
+.game {
+    width: 60%;
+    height: 200px;
+    display: flex;
+    /* flex-wrap: wrap; */
+    margin: 0;
+    column-gap: 100px;
+    /* align-items: center; */
+    /* justify-content: center; */
 }
 
 /* .game {

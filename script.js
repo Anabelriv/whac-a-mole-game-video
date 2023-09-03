@@ -27,7 +27,7 @@ $("#webcam-switch").change(function () {
         webcam.start()
             .then(result => {
                 cameraStarted();
-                startMotionDetection();
+                update();
                 hideAppearMole();
             })
             .catch(err => {
@@ -41,16 +41,6 @@ $("#webcam-switch").change(function () {
     }
 });
 
-// function setMoleReady(mole) {
-//     // mole.ready = true;
-// }
-
-// function setAllMoleReadyStatus(isReady) {
-//     // for (var moleName in moles) {
-//     //     moles[moleName].ready = isReady;
-//     // }
-// }
-
 // getting the measures of the screen and the small black screen and the sizes of the moles
 $('.mole').on('load', function (event) {
     var viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -60,7 +50,6 @@ $('.mole').on('load', function (event) {
     moles[this.attributes['vm-id'].value] = {
         id: this.attributes['vm-id'].value,
         name: this.attributes['name'].value,
-        // ready: this.attributes['ready'].value,
         width: this.width * ratioWidth,
         height: this.height * ratioHeight,
         x: this.x * ratioWidth,
@@ -70,20 +59,8 @@ $('.mole').on('load', function (event) {
     if (this.complete) $(this).trigger('load');
 });
 
-function startMotionDetection() {
-    // setAllMoleReadyStatus(false);
-    update();
-    console.log("hiush");
-    // setTimeout(setAllMoleReadyStatus, 1000, true);
-}
-
 function playHover(mole) {
-    // if (!mole.ready) return;
-    // mole.ready = false;
     updateScore();
-    // throttle the note
-    // setTimeout(setMoleReady, 500, mole);
-
 }
 
 function updateScore() {
@@ -190,7 +167,7 @@ function differenceAccuracy(target, data1, data2) {
 }
 
 function checkAreas() {
-    // loop over the drum areas
+    // loop over the mole areas
     for (var moleName in moles) {
         var mole = moles[moleName];
         if (mole.x > 0 || mole.y > 0) {
@@ -203,14 +180,19 @@ function checkAreas() {
                 average += (blendedData.data[i * 4] + blendedData.data[i * 4 + 1] + blendedData.data[i * 4 + 2]) / 3;
                 ++i;
             }
-            // calculate an average between of the color values of the drum area
+            // calculate an average between of the color values of the mole area
             average = Math.round(average / (blendedData.data.length * 0.25));
             if (average > 20) {
-                // over a small limit, consider that a movement is detected
-                // play a note and show a visual feedback to the user
-                //console.log(drum.name + '-' + average)
-                console.log("bla")
-                playHover(mole); // I need to change this to whack function??
+                moleIsUp = true;
+                // over a small limit, consider that a movement is detected and the mole has the class up
+                if (moleIsUp) {
+                    if (document.querySelector('.hole' + mole.id).classList.contains('up')) {
+                        // The mole is up and has the 'up' class
+                        console.log("Mole up: " + mole.name);
+                        playHover(mole);
+                        updateScore();
+                    }
+                }
             }
         }
     }
