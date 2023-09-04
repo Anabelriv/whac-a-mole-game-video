@@ -1,0 +1,79 @@
+{% extends 'base.html' %} {% block content %}
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Whack A Mole!</title>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/style_anabel.css'%}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <script src="{% static 'js/script.js' %}"></script>
+   
+</head>
+
+<body>
+    {% if request.user.is_authenticated and request.user == post.author %}
+<p>
+  <a href="url 'post-edit' post.id">Edit</a>
+  <a href="url 'post-delete' post.id">Delete</a>
+</p>
+{% endif %}
+    <main id="motion-app">
+        <!-- Set up and webcam control -->
+        <div class="form-control webcam-start" id="webcam-control">
+            <label class="form-switch">
+                <input type="checkbox" id="webcam-switch">
+                <i></i>
+                <span id="webcam-caption">Click to Start Webcam and whack a mole!</span>
+            </label>
+        </div>
+        <div id="errorMsg" class="col-12 alert-danger d-none">
+            Fail to start camera <br>
+            1. Please allow permission to access camera. <br>
+            2. If you are browsing through social media built in browsers, look for the ... or browser icon on the right
+            top/bottom corner, and open the page in Sarafi (iPhone)/ Chrome (Android)
+        </div>
+        <!-- First background when webcam is off -->
+        <div class="mole-background">
+            <img src="https://t4.ftcdn.net/jpg/01/17/59/79/360_F_117597995_MXyFgPQrVHLJpD9OPitvXhbnFWjLf22s.jpg">
+        </div>
+        <!-- webcam bar -->
+        <div class="md-modal md-effect-12">
+            <div class="app-panel md-content">
+                <div class="webcam-container d-none">
+                    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+                    <canvas id="canvas-source" width="640" height="480"></canvas>
+                    <div class="motion-cam">
+                        <div class="motion-cam-title">Motion Cam</div>
+                        <canvas id="canvas-blended" width="440"
+                            height="280"></canvas><!--small canvas screen for motion recognition-->
+                    </div>
+                </div>
+                <h1 class="score" id="scoreEl">0</h1>
+                <div class="game">4
+                    <div class="hole hole1">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="crash" vm-id="1"></img>
+                    </div>
+                    <div class="hole hole2">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="kit-kat" vm-id="2"></img>
+                    </div>
+                    <div class="hole hole3">
+                        <img src="https://media.istockphoto.com/id/1375826186/vector/cute-mole.jpg?s=612x612&w=0&k=20&c=E-MInPcovwLzwEJva6x8npKkb0CkTilD-G2ar9ih_5A="
+                            class="mole" name="sneacker" vm-id="3"></img>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+</body>
+
+</html>
+{% endblock content %}
